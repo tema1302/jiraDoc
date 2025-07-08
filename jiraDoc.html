@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Новый процесс работы с задачами: Jira и Confluence</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        .flow-arrow {
+            font-size: 2rem;
+            line-height: 1;
+            color: #01949A;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #004369;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <!-- Confirmation that NEITHER Mermaid JS NOR SVG were used. Palette: Energetic & Playful -->
+
+    <div class="container mx-auto p-4 md:p-8">
+
+        <header class="text-center mb-4 md:mb-8">
+            <h1 class="text-4xl md:text-5xl font-black text-[#004369] mb-2">Документация — новый стандарт</h1>
+        </header>
+
+        <main class="space-y-12 md:space-y-20">
+
+            <section id="problem" class="text-center">
+                <div class="bg-white rounded-lg shadow-md p-8 max-w-4xl mx-auto">
+                    <h2 class="text-2xl font-bold text-[#004369] mb-4">Одна из проблем — отсутствие документации</h2>
+                    <p class="text-gray-600 mb-6">Мы теряем знания и замедляем разработку, потому что техническая документация не создается систематически. Пора это исправить.</p>
+                    <div class="bg-[#DB1F48] text-white rounded-lg p-6 inline-block">
+                        <div class="text-6xl font-black">~90%</div>
+                        <div class="text-lg font-bold">задач не имеют тех. документации</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="old-workflow">
+                <h2 class="text-3xl font-bold text-center text-[#004369] mb-8">Как мы работали раньше</h2>
+                <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
+                    <p class="text-center text-gray-600 mb-8">Нет этапа документирования — никого она и не интересует.</p>
+                    <div class="flex flex-wrap items-center justify-center gap-4 text-center">
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Open</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">In Progress</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Code Review</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">QA</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Test Review</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Need Release</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Done</div>
+                    </div>
+                     <div class="mt-6 text-center text-red-600 font-bold p-4 bg-red-50 rounded-lg">
+                        ❌ Никто не знает и не помнит, для кого функционал создавали и какие боли закрывали.
+                    </div>
+                </div>
+            </section>
+
+            <section id="new-workflow">
+                <h2 class="text-3xl font-bold text-center text-[#004369] mb-8">Как будем работать далее</h2>
+                <div class="bg-white rounded-lg shadow-md p-6 md:p-8">
+                    <p class="text-center text-gray-600 mb-8">Мы добавляем новый статус «Doc», чтобы гарантировать создание документации по задачам.</p>
+                     <div class="flex flex-wrap items-center justify-center gap-2 md:gap-4 text-center text-sm md:text-base">
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Open</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">In Progress</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Code Review</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">QA</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Test Review</div>
+                        <div class="flow-arrow hidden md:block text-[#DB1F48]">→</div>
+                        <div class="bg-[#01949A] text-white border-4 border-[#DB1F48] rounded-lg p-3 font-black shadow-lg scale-110">Doc</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Need Release</div>
+                        <div class="flow-arrow hidden md:block">→</div>
+                        <div class="bg-gray-100 rounded-lg p-3 font-bold">Done</div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="details" class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-2xl font-bold text-[#004369] mb-4">Роль Тимлида: ключ к качеству</h3>
+                    <p class="text-gray-600 mb-4">Чтобы гарантировать высокое качество документации, только тимлиды или ведущие разработчики могут перевести задачу из статуса «Doc» в «Need Release».</p>
+                    <div class="bg-blue-50 text-[#004369] rounded-lg p-4 flex items-center">
+                        <span class="text-4xl mr-4">🔑</span>
+                        <div>
+                            <p class="font-bold">Только тимлиды и разработчики.</p>
+                            <p>Это наш новый этап контроля качества.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                     <h3 class="text-2xl font-bold text-[#004369] mb-4">Документация — часть работы</h3>
+                    <p class="text-gray-600 mb-4">Теперь написание документации — это неотъемлемая часть жизненного цикла задачи, а не второстепенное дело.</p>
+                    <div class="chart-container h-64 md:h-80">
+                        <canvas id="workflowShareChart"></canvas>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="confluence-structure">
+                 <h2 class="text-3xl font-bold text-center text-[#004369] mb-8">Структура документации в Confluence</h2>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-2xl font-bold text-[#004369] mb-4">Единый шаблон страницы</h3>
+                        <p class="text-gray-600 mb-4">Каждая страница документации создается по единому шаблону. Это обеспечивает полноту и единообразие информации.</p>
+                        <div class="chart-container h-80 md:h-96">
+                            <canvas id="templateStructureChart"></canvas>
+                        </div>
+                    </div>
+                     <div class="bg-white rounded-lg shadow-md p-6">
+                        <h3 class="text-2xl font-bold text-[#004369] mb-4">Где всё хранится?</h3>
+                        <p class="text-gray-600 mb-4">Мы создадим централизованное пространство для всей технической документации.</p>
+                         <div class="space-y-3 font-mono text-sm">
+                             <div class="bg-gray-100 p-3 rounded-md">
+                                 <span>🏠</span> <span class="font-bold text-[#004369]">Тех.документация</span>
+                             </div>
+                             <div class="ml-4 border-l-2 border-[#01949A] pl-4">
+                                 <div class="bg-gray-100 p-3 rounded-md">
+                                     <span>📁</span> <span class="font-bold">Модуль регистрации</span>
+                                 </div>
+                                 <div class="ml-4 border-l-2 border-gray-300 pl-4 pt-2">
+                                     <div class="bg-white p-2 rounded-md border">📄 Документация CHECKOUT-123</div>
+                                     <div class="bg-white p-2 mt-2 rounded-md border">📄 Документация CHECKOUT-124</div>
+                                 </div>
+                             </div>
+                             <div class="ml-4 border-l-2 border-[#01949A] pl-4 pt-2">
+                                 <div class="bg-gray-100 p-3 rounded-md">
+                                     <span>📁</span> <span class="font-bold">Модуль чекаута</span>
+                                 </div>
+                             </div>
+                         </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="benefits" class="text-center">
+                <h2 class="text-3xl font-bold text-center text-[#004369] mb-8">Что мы получим в итоге?</h2>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="text-4xl mb-3">🚀</div>
+                        <h3 class="font-bold text-base text-[#004369]">Быстрая адаптация</h3>
+                        <p class="text-gray-600 text-sm">Новые сотрудники быстрее погрузятся в проект.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="text-4xl mb-3">📚</div>
+                        <h3 class="font-bold text-base text-[#004369]">Общая база знаний</h3>
+                        <p class="text-gray-600 text-sm">Вся команда имеет доступ к актуальной информации.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="text-4xl mb-3">📉</div>
+                        <h3 class="font-bold text-base text-[#004369]">Меньше ошибок</h3>
+                        <p class="text-gray-600 text-sm">Куда меньше рисков при доработках для конкретных стран.</p>
+                    </div>
+                    <div class="bg-white rounded-lg shadow-md p-6">
+                        <div class="text-4xl mb-3">⏱️</div>
+                        <h3 class="font-bold text-base text-[#004369]">Экономия времени</h3>
+                        <p class="text-gray-600 text-sm">Не нужно додумывать за предыдущего разраба или писать продакту.</p>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="text-center mt-12 md:mt-20 pt-8 border-t border-gray-200">
+            <p class="text-gray-500">Документ подготовлен для внутреннего использования.</p>
+        </footer>
+    </div>
+
+    <script>
+        const tooltipTitleCallback = (tooltipItems) => {
+            const item = tooltipItems[0];
+            let label = item.chart.data.labels[item.dataIndex];
+            if (Array.isArray(label)) {
+                return label.join(' ');
+            }
+            return label;
+        };
+        
+        const processLabels = (labels) => {
+            const maxLength = 16;
+            return labels.map(label => {
+                if (label.length <= maxLength) {
+                    return label;
+                }
+                const words = label.split(' ');
+                const lines = [];
+                let currentLine = '';
+                words.forEach(word => {
+                    if ((currentLine + ' ' + word).trim().length > maxLength) {
+                        lines.push(currentLine.trim());
+                        currentLine = word;
+                    } else {
+                        currentLine = (currentLine + ' ' + word).trim();
+                    }
+                });
+                lines.push(currentLine.trim());
+                return lines;
+            });
+        };
+
+        const workflowCtx = document.getElementById('workflowShareChart').getContext('2d');
+        new Chart(workflowCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Разработка, ревью и QA', 'Документация'],
+                datasets: [{
+                    label: 'Доля в процессе',
+                    data: [7, 1],
+                    backgroundColor: ['#004369', '#01949A'],
+                    borderColor: '#FFFFFF',
+                    borderWidth: 4,
+                    hoverOffset: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
+                    }
+                },
+                cutout: '70%'
+            }
+        });
+
+        const templateCtx = document.getElementById('templateStructureChart').getContext('2d');
+        new Chart(templateCtx, {
+            type: 'bar',
+            data: {
+                labels: processLabels([
+                    'Название задачи', 
+                    'Ссылка на Jira', 
+                    'Описание проблемы', 
+                    'Описание технического решения'
+                ]),
+                datasets: [{
+                    label: 'Важность раздела',
+                    data: [10, 10, 50, 80],
+                    backgroundColor: [
+                        'rgba(1, 148, 154, 0.7)',
+                        'rgba(0, 67, 105, 0.7)',
+                        'rgba(219, 31, 72, 0.7)',
+                        'rgba(0, 67, 105, 1)'
+                    ],
+                    borderColor: [
+                        '#01949A',
+                        '#004369',
+                        '#DB1F48',
+                        '#004369'
+                    ],
+                    borderWidth: 2
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        callbacks: {
+                            title: tooltipTitleCallback
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        display: false
+                    },
+                    y: {
+                        ticks: {
+                            font: {
+                                size: 14
+                            }
+                        }
+                    }
+                }
+            }
+        });
+        
+        const generateBtn = document.getElementById('generateBtn');
+        const taskInput = document.getElementById('taskInput');
+        const loader = document.getElementById('loader');
+        const docOutput = document.getElementById('docOutput');
+        const errorOutput = document.getElementById('errorOutput');
+
+        generateBtn.addEventListener('click', async () => {
+            const taskDescription = taskInput.value.trim();
+            if (!taskDescription) {
+                errorOutput.textContent = 'Пожалуйста, введите описание задачи.';
+                errorOutput.classList.remove('hidden');
+                docOutput.classList.add('hidden');
+                return;
+            }
+
+            loader.classList.remove('hidden');
+            docOutput.classList.add('hidden');
+            errorOutput.classList.add('hidden');
+            generateBtn.disabled = true;
+
+            const prompt = `You are a senior Russian software engineer. Your task is to write a draft for technical documentation for a Jira task. The documentation will be stored in Confluence. It must be in Russian and follow this specific template:
+
+### Название задачи
+${taskDescription}
+
+### Краткое описание проблемы
+(Concisely describe the business or technical problem this task solves in 2-3 sentences).
+
+### Описание технического решения
+(Detail the technical implementation. Mention key components, libraries, architectural patterns, API endpoints, or database schema changes. Be specific and clear for other developers).
+
+### Затронутые компоненты
+(List the parts of the system, services, or modules affected by this change).
+
+---
+Based on the task title "${taskDescription}", generate the content for the sections "Краткое описание проблемы", "Описание технического решения", and "Затронутые компоненты".`;
+            
+            try {
+                const apiKey = ""; 
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                
+                const payload = {
+                    contents: [{
+                        role: "user",
+                        parts: [{ text: prompt }]
+                    }]
+                };
+
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`API Error: ${response.status} ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                
+                if (result.candidates && result.candidates.length > 0 && result.candidates[0].content && result.candidates[0].content.parts && result.candidates[0].content.parts.length > 0) {
+                    const generatedText = result.candidates[0].content.parts[0].text;
+                    docOutput.textContent = generatedText;
+                    docOutput.classList.remove('hidden');
+                } else {
+                    throw new Error('Не удалось получить корректный ответ от ИИ.');
+                }
+
+            } catch (error) {
+                console.error('Error calling Gemini API:', error);
+                errorOutput.textContent = `Произошла ошибка: ${error.message}. Попробуйте еще раз.`;
+                errorOutput.classList.remove('hidden');
+            } finally {
+                loader.classList.add('hidden');
+                generateBtn.disabled = false;
+            }
+        });
+
+    </script>
+
+</body>
+</html>
